@@ -1,51 +1,32 @@
 const BASE_URL = import.meta.env.VITE_API_BASE;
 
 const GET = async (endpoint, params = {}) => {
-      const query = new URLSearchParams(params).toString();
-      const response = await fetch(`${BASE_URL}/api/v1${endpoint}${query ? "?" + query : ""}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("authToken") || ""}`,
-        },
-      });
-      if (!response.ok) throw new Error(response.status);
-      return response.json();
-}
-  
-const POST = async (endpoint, body = {}, params = {}) => {
-    const query = new URLSearchParams(params).toString();
-    const response = await fetch(`${BASE_URL}/api/v1${endpoint}${query ? "?" + query : ""}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("authToken") || ""}`,
-      },
-      body: JSON.stringify({ body }),
-    });
-    if (!response.ok) throw new Error(response.status);
-    return response.json();
+  const query = new URLSearchParams(params).toString();
+  const response = await fetch(`${BASE_URL}/api/v1${endpoint}${query ? "?" + query : ""}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("authToken") || ""}`,
+    },
+  });
+  if (response.status === 403) throw new Error(response.status);
+  if (!response.ok) throw new Error(`GET ${endpoint} failed`);
+  return response.json();
 };
 
-const logOut = async (token) => {
-  const response = await fetch(`${BASE_URL}/auth/logout`, {
+const POST = async (endpoint, body = {}, params = {}) => {
+  const query = new URLSearchParams(params).toString();
+  const response = await fetch(`${BASE_URL}/api/v1${endpoint}${query ? "?" + query : ""}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${sessionStorage.getItem("authToken") || ""}`,
     },
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ ...body }),
   });
-  if (!response.ok) throw new Error(`POST /logout failed`);
+  if (response.status === 403) throw new Error(response.status);
+  if (!response.ok) throw new Error(`POST ${endpoint} failed`);
   return response.json();
-};
-
-const chatApi = async (payload) => {
-  return POST(`/chat`, payload);
-}
-
-const convHistoryApi = async ({ username, coursename }) => {
-  return GET(`/chat/history/${username}/${coursename}`);
 };
 
 const chatHistoryApi = async ({ sessionId }) => {
@@ -100,4 +81,4 @@ const chatStreamApi = async ({ payload, onChunk, onError, onComplete }) => {
   }
 }
 
-export { logOut, chatApi, convHistoryApi, chatHistoryApi, chatStreamApi };
+export { chatHistoryApi, chatStreamApi };

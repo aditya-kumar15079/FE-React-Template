@@ -1,23 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { chatApi, convHistoryApi, chatHistoryApi, chatStreamApi } from "@/services/api";
+import { chatHistoryApi, chatStreamApi } from "@/services/api";
 
 //createAsyncThunk([slice name]/[action name], callback function) for fetching messages
-export const chat = createAsyncThunk("chat/chat", async (payload, { rejectWithValue }) => {
-  try {
-    return await chatApi(payload);
-  } catch (err) {
-    return rejectWithValue(err.message);
-  }
-});
-
-export const convHistory = createAsyncThunk("chat/convHistory", async (params, { rejectWithValue }) => {
-  try {
-    return await convHistoryApi(params);
-  } catch (err) {
-    return rejectWithValue(err.message);
-  }
-});
-
 export const chatHistory = createAsyncThunk("chat/chatHistory", async (params, { rejectWithValue }) => {
   try {
     return await chatHistoryApi(params);
@@ -53,11 +37,6 @@ const chatSlice = createSlice({
     error: null,
     sessionId: "",
     currentBotMessage: "",
-    prevConversation: {
-      conversations: null,
-      loading: false,
-      error: null,
-    },
     chatHistory: {
       chats: [],
       loading: false,
@@ -93,34 +72,6 @@ const chatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // chat
-      .addCase(chat.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(chat.fulfilled, (state, action) => {
-        state.loading = false;
-        state.messages.push(action.payload); // append bot response
-      })
-      .addCase(chat.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // conversation history
-      .addCase(convHistory.pending, (state) => {
-        state.prevConversation.loading = true;
-        state.prevConversation.error = null;
-      })
-      .addCase(convHistory.fulfilled, (state, action) => {
-        state.prevConversation.loading = false;
-        state.prevConversation.conversations = action.payload;
-      })
-      .addCase(convHistory.rejected, (state, action) => {
-        state.prevConversation.loading = false;
-        state.prevConversation.error = action.payload;
-      })
-
       // chat history
       .addCase(chatHistory.pending, (state) => {
         state.chatHistory.loading = true;
