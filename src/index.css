@@ -16,23 +16,19 @@
 }
 
 @layer base {
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    @apply cursor-pointer;
+  button{
+    @apply cursor-pointer hover:brightness-120 active:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100;
   }
 }
 
 @layer components {
 
   .primary-button {
-    @apply bg-primary text-white font-bold text-base min-h-[50px] min-w-[100px] w-max px-8 relative rounded-full shadow-md/20 
-    hover:brightness-120 active:shadow-none 
-    disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100;
+    @apply bg-primary text-white font-bold text-base min-h-[50px] min-w-[100px] w-max px-8 relative rounded-full shadow-md active:shadow-none
   }
 
   .secondary-button {
-   @apply bg-secondary text-gray-800 font-bold text-base min-h-[50px] min-w-[100px] w-max px-8 relative rounded-full border border-gray-800 shadow-md hover:brightness-120 active:shadow-none 
-   disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100;
+   @apply bg-secondary text-gray-800 font-bold text-base min-h-[50px] min-w-[100px] w-max px-8 relative rounded-full border border-gray-800 shadow-md active:shadow-none
   }
 }
 
