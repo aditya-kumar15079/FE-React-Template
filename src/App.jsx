@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { decrement, increment } from "./reducers/counterSlice";
 import Loader from "./components/common/Loader";
-import { convHistory } from "./reducers/chatSlice";
 
 function App() {
   // const [count, setCount] = useState(0);
@@ -25,8 +24,8 @@ function App() {
         </div>
 
         <div className="flex items-center">
-          <label className="mr-10 font-bold">API:</label>
-          <button type="button" className="primary-button" onClick={() => dispatch(convHistory({ username: "abc", coursename: "xyz" }))}>
+          <label className="mr-10 font-bold">Disabled:</label>
+          <button type="button" className="primary-button" disabled={true}>
             Fetch data
           </button>
         </div>
